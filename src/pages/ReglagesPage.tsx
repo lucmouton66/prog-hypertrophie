@@ -5,14 +5,25 @@ import { newId } from '../lib/id'
 import { todayISO, formatDateShortFr } from '../lib/date'
 import { calculatePlates } from '../lib/plates'
 import { exportAllData, importAllData, type ExportedData } from '../lib/db'
+import { mergeProgramWithSeed } from '../lib/seedProgram'
 
 export function ReglagesPage() {
-  const { bodyweight, upsertBodyWeight, reloadAll } = useAppStore()
+  const { program, bodyweight, upsertBodyWeight, updateProgram, reloadAll } = useAppStore()
   const [weightInput, setWeightInput] = useState('')
   const [plateTarget, setPlateTarget] = useState('')
   const [barWeight, setBarWeight] = useState(20)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [importMessage, setImportMessage] = useState('')
+  const [reloadMessage, setReloadMessage] = useState('')
+
+  async function handleReloadProgram() {
+    const ok = confirm(
+      "Recharger le programme depuis la dernière version ? Les exercices déjà présents (même nom) gardent leur historique. Les exercices renommés ou nouveaux repartiront sans historique.",
+    )
+    if (!ok) return
+    await updateProgram(mergeProgramWithSeed(program))
+    setReloadMessage('Programme mis à jour ✓')
+  }
 
   async function addWeight() {
     const w = Number(weightInput)
@@ -115,6 +126,18 @@ export function ReglagesPage() {
             )}
           </div>
         )}
+      </section>
+
+      <section className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4">
+        <h2 className="mb-2 text-sm font-semibold text-zinc-200">Programme</h2>
+        <p className="mb-3 text-xs text-zinc-500">
+          Le programme est enregistré sur cet appareil dès la première ouverture. Recharge-le après chaque mise à jour
+          pour récupérer les derniers exercices/réglages.
+        </p>
+        <button onClick={handleReloadProgram} className="w-full rounded-lg bg-zinc-800 py-2 text-sm font-medium text-amber-400">
+          Recharger le programme
+        </button>
+        {reloadMessage && <p className="mt-2 text-xs text-zinc-400">{reloadMessage}</p>}
       </section>
 
       <section className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4">

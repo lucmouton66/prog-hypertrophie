@@ -1,4 +1,4 @@
-import type { Program, TrackingType } from '../types'
+import type { Day, Program, ProgramExercise, TrackingType } from '../types'
 import { newId } from './id'
 
 // Programme d'exemple reflétant le split validé avec l'utilisateur : 6 jours
@@ -108,4 +108,25 @@ export function buildSeedProgram(): Program {
       },
     ],
   }
+}
+
+// Recharge le programme depuis le code (seedProgram.ts) tout en conservant les
+// id existants pour les séances/exercices dont le nom n'a pas changé, afin que
+// l'historique déjà loggé reste rattaché aux bons exercices dans Progression.
+// Les nouveaux exercices ou ceux renommés démarrent avec un id neuf (et donc
+// sans historique préalable, ce qui est attendu).
+export function mergeProgramWithSeed(oldProgram: Program | null): Program {
+  const fresh = buildSeedProgram()
+  if (!oldProgram) return fresh
+
+  const days: Day[] = fresh.days.map((newDay) => {
+    const oldDay = oldProgram.days.find((d) => d.name === newDay.name)
+    const exercises: ProgramExercise[] = newDay.exercises.map((newEx) => {
+      const oldEx = oldDay?.exercises.find((e) => e.exerciseName === newEx.exerciseName)
+      return oldEx ? { ...newEx, id: oldEx.id } : newEx
+    })
+    return { ...newDay, id: oldDay?.id ?? newDay.id, exercises }
+  })
+
+  return { ...fresh, id: oldProgram.id, days }
 }
