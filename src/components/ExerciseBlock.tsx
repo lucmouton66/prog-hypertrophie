@@ -44,7 +44,9 @@ export function ExerciseSummaryLine({ exercise, log, history, lastLog }: Pick<Ex
             Dernière fois : meilleure tenue {lastPoint.maxReps}s{lastPoint.maxWeight > 0 ? ` (+${lastPoint.maxWeight}kg)` : ''}
           </div>
         ) : isDuration ? (
-          <div className="mt-1 text-xs text-zinc-600">Dernière fois : {lastPoint.maxReps} min</div>
+          <div className="mt-1 text-xs text-zinc-600">
+            Dernière fois : {lastPoint.maxReps} min{lastPoint.maxWeight > 0 ? ` à ${lastPoint.maxWeight}W` : ''}
+          </div>
         ) : (
           <div className="mt-1 text-xs text-zinc-600">
             Dernière fois : {lastPoint.maxWeight}kg max · vol {Math.round(lastPoint.totalVolume)}kg

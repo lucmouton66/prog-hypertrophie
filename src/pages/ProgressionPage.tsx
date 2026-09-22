@@ -13,7 +13,10 @@ function buildMetrics(trackingType: TrackingType): { key: ProgressMetric; label:
     ]
   }
   if (trackingType === 'duration') {
-    return [{ key: 'maxReps', label: 'Durée', unit: ' min', color: '#60a5fa' }]
+    return [
+      { key: 'maxReps', label: 'Durée', unit: ' min', color: '#60a5fa' },
+      { key: 'maxWeight', label: 'Puissance', unit: 'W', color: '#fbbf24' },
+    ]
   }
   return [
     { key: 'maxWeight', label: 'Charge max', unit: 'kg', color: '#fbbf24' },

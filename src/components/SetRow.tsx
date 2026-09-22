@@ -18,14 +18,31 @@ export function SetRow({ set, isDone, suggestedWeight, trackingType = 'reps', on
     return (
       <div className="flex items-center gap-2 py-1.5">
         <span className="w-5 shrink-0 text-center text-xs text-zinc-500">{set.setIndex + 1}</span>
-        <input
-          type="number"
-          inputMode="numeric"
-          placeholder="minutes"
-          value={set.reps || ''}
-          onChange={(e) => onChange('reps', Number(e.target.value))}
-          className="flex-1 rounded-lg border border-zinc-700 bg-zinc-800/80 px-3 py-2 text-center text-base tabular-nums text-zinc-100 focus:border-amber-400 focus:outline-none"
-        />
+
+        <div className="flex-1">
+          <input
+            type="number"
+            inputMode="numeric"
+            placeholder="watts"
+            value={set.weight || ''}
+            onChange={(e) => onChange('weight', Number(e.target.value))}
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-800/80 px-3 py-2 text-center text-base tabular-nums text-zinc-100 focus:border-amber-400 focus:outline-none"
+          />
+        </div>
+
+        <span className="text-xs text-zinc-600">·</span>
+
+        <div className="flex-1">
+          <input
+            type="number"
+            inputMode="numeric"
+            placeholder="minutes"
+            value={set.reps || ''}
+            onChange={(e) => onChange('reps', Number(e.target.value))}
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-800/80 px-3 py-2 text-center text-base tabular-nums text-zinc-100 focus:border-amber-400 focus:outline-none"
+          />
+        </div>
+
         <button
           onClick={onMarkDone}
           title="Fait"
